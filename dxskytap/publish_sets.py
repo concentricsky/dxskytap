@@ -88,7 +88,7 @@ class PublishSets(RestMap):
         if(time_zone is not None):
             body['time_zone'] = time_zone
         if configuration_id is not None:
-            resource = "/configurations/{configId}/publish_sets".format(configId=configuration_id)
+            resource = "configurations/{configId}/publish_sets".format(configId=configuration_id)
         else:
             resource = "publish_sets"
         result = self._connect.post(resource, body=body)
