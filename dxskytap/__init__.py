@@ -32,6 +32,7 @@ Classes:
 '''
 
 from dxskytap.assets import Assets
+from dxskytap.schedules import Schedules
 from dxskytap.users import Users, User
 from dxskytap.configurations import Configurations, Configuration
 from dxskytap.templates import Templates, Template
@@ -159,3 +160,10 @@ class Skytap(object):
 
     def reports(self):
         return Reports(self.connect)
+
+    def schedules(self):
+        """
+        This function returns the dictionary of schedules that the logged in
+        user is able to access.
+        """
+        return Schedules(self.connect)
