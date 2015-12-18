@@ -47,7 +47,7 @@ except ImportError:
 
 from base64 import b64encode
 import httplib2
-import signal
+import socket
 import re
 import logging
 
@@ -100,7 +100,8 @@ class Connect(object):
         # Create Http class with support for Digest HTTP Authentication
         self.http = httplib2.Http(cache=None,
             disable_ssl_certificate_validation=True,
-            ca_certs=ca_certs)
+            ca_certs=ca_certs,
+            timeout=request_timeout)
 
         self.http.follow_all_redirects = True
         
@@ -198,13 +199,11 @@ class Connect(object):
         while resp is None and tries_remaining > 0:
             tries_remaining = tries_remaining - 1
             try:
-                signal.signal(signal.SIGALRM, _request_timeout_handler)
-                signal.alarm(self._request_timeout)
                 resp, content = self.http.request(url, method.upper(),
                     body=body, headers=headers)
-                signal.alarm(0)
-            except TimeoutException:
+            except socket.timeout:
                 resp = None
+                raise TimeoutException
 
         if resp is None:
             raise NoResponseException("Unable to get a response in"
