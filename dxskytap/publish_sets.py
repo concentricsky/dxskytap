@@ -75,7 +75,8 @@ class PublishSets(RestMap):
         self._vm_class = vm_class
 
     def create_publish_set(self, name, publish_set_type, password, 
-        start_time=None, end_time=None, time_zone=None):
+        start_time=None, end_time=None, time_zone=None,
+        configuration_id=None):
 
         body = { 'name': name,
                  'publish_set_type': publish_set_type,
@@ -86,6 +87,10 @@ class PublishSets(RestMap):
             body['end_time'] = end_time
         if(time_zone is not None):
             body['time_zone'] = time_zone
-        result = self._connect.post("publish_sets", body=body)
+        if configuration_id is not None:
+            resource = "/configurations/{configId}/publish_sets".format(configId=configuration_id)
+        else:
+            resource = "publish_sets"
+        result = self._connect.post(resource, body=body)
         return PublishSet(self._connect, self._base_resource, result['id'],
             result, self._vm_class)
