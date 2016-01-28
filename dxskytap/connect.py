@@ -71,6 +71,12 @@ class NoResponseException(SkytapException):
     """
     pass
 
+class ResourceNotFoundException(SkytapException):
+    """
+    Exception thrown when http gets 404
+    """
+    pass
+
 class Connect(object):
     """
     Class for managing the core REST HTTP Connection.
@@ -231,6 +237,8 @@ class Connect(object):
             elif(isinstance(ret_data, dict) and 
                 ret_data.get('error','') not in accepted_values):
 
+                if resp.status == 404:
+                    raise ResourceNotFoundException(ret_data['error'])
                 raise ValueError(ret_data['error'])
         return ret_data
 
