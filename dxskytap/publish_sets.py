@@ -76,6 +76,7 @@ class PublishSets(RestMap):
 
     def create_publish_set(self, name, publish_set_type, password, 
         start_time=None, end_time=None, time_zone=None,
+        runtime_limit=None,
         configuration_id=None):
 
         body = { 'name': name,
@@ -87,6 +88,8 @@ class PublishSets(RestMap):
             body['end_time'] = end_time
         if(time_zone is not None):
             body['time_zone'] = time_zone
+        if(runtime_limit is not None):
+            body['runtime_limit'] = runtime_limit
         if configuration_id is not None:
             resource = "configurations/{configId}/publish_sets".format(configId=configuration_id)
         else:
